@@ -1,14 +1,33 @@
-import mysql from "mysql2"
+import {Sequelize} from 'sequelize';
 
+const {
+    DB_HOST,
+    DB_NAME,
+    DB_PASSWORD,
+    DB_USER,
+    DB_PORT
+} = process.env;
 
 const dbConfig = {
-    host: process.env.DB_HOST,
-    user: process.env.DB_USER,
-    password: process.env.DB_PASSWORD,
-    database: process.env.DB_NAME,
-
+    host: DB_HOST,
+    port: DB_PORT,
+    dialect: 'mysql',
+    logging: false,
 }
+const sequelize = new Sequelize(DB_NAME, DB_USER, DB_PASSWORD, dbConfig);
 
-const connection = mysql.createConnection(dbConfig);
 
-export default connection.promise()
+
+(async () => {
+    try {
+        await sequelize.authenticate();
+        console.log('Connection has been established successfully.')
+
+    }catch(err) {
+        console.log('Unable to connect to the database.',err);
+    }
+})();
+
+
+export default sequelize;
+
