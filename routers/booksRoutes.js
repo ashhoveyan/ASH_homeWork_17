@@ -13,7 +13,7 @@ const router = Router();
 
 //apis
 
-router.post("/create",authenticate  ,validate(bookSchema.book,'body'), bookController.getBooks);
+router.post("/create",authenticate  ,validate(bookSchema.book,'body'), bookController.addBook);
 router.get("/list", authenticate , bookController.getBooks);
 
 export default router;
