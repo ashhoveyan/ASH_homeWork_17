@@ -1,8 +1,8 @@
 import sequelize from '../clients/sequelize.mysql.js';
 import { DataTypes, Model } from 'sequelize';
 
-import Book from './Books.js';
-import User from './Users.js';
+import Books from './Books.js';
+import Users from './Users.js';
 
 class Review extends Model {}
 
@@ -32,14 +32,14 @@ Review.init(
     {
         sequelize,
         timestamps: true,
-        modelName: 'Review',
+        modelName: 'reviews',
         tableName: 'reviews',
     }
 );
 
-Review.belongsTo(User, { foreignKey: 'userId', as: 'user' });
-Review.belongsTo(Book, { foreignKey: 'bookId', as: 'book' });
-User.hasMany(Review, { foreignKey: 'userId', as: 'reviews' });
-Book.hasMany(Review, { foreignKey: 'bookId', as: 'reviews' });
+Review.belongsTo(Users, { foreignKey: 'userId', as: 'user' });
+Review.belongsTo(Books, { foreignKey: 'bookId', as: 'book' });
+Users.hasMany(Review, { foreignKey: 'userId', as: 'reviews' });
+Books.hasMany(Review, { foreignKey: 'bookId', as: 'reviews' });
 
 export default Review;
