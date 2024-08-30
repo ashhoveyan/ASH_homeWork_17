@@ -1,7 +1,7 @@
 {
   "name": "theatre",
   "version": "1.0.0",
-  "description": "theatre registration api",
+  "description": "books api",
   "main": "app.js",
   "license": "MIT",
   "type": "module",
@@ -18,5 +18,8 @@
     "nodemon": "^3.1.4",
     "path": "^0.12.7",
     "sequelize": "^6.37.3"
+  },
+  "scripts": {
+    "start": "nodemon app.js"
   }
 }
