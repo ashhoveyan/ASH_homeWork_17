@@ -43,8 +43,14 @@ export default {
    },
     async getBooks(req, res) {
         try {
+            const total = await Books.count()
+
             let page = 1;
             let limit = 10;
+
+            // const offset= (page - 1) * limit,
+
+
             const booksList = await Books.findAll({
                 include: [
                     {
@@ -55,8 +61,7 @@ export default {
                 order: [
                     ['createdAt', 'Desc']
                 ],
-                offset: (page - 1) * limit,
-                limit,
+
             });
 
             if (booksList.length === 0) {
