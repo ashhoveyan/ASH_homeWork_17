@@ -37,10 +37,17 @@ export default {
     async login(req, res) {
         try {
             const { username, password } = req.body;
+            const hashedPassword = await bcrypt.hash(password + process.env.SECRET_FOR_PASSWORD, 10);
+
             const user = await Users.findOne({
-                where: { username: username }
+                where: {
+                    username: username ,
+                    password: hashedPassword
+                },
             });
-            if (!user) {
+
+
+            if (!user || hashedPassword !== user.password) {
                 return res.status(400).json({
                     message: 'Invalid username or password'
                 });
