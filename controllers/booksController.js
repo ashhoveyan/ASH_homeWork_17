@@ -1,5 +1,10 @@
 import Books from '../models/Books.js'
 
+import Users from '../models/Users.js'
+
+
+
+
 export default {
    async addBook(req, res) {
        try {
@@ -38,7 +43,21 @@ export default {
    },
     async getBooks(req, res) {
         try {
-            const booksList = await Books.findAll();
+            let page = 1;
+            let limit = 10;
+            const booksList = await Books.findAll({
+                include: [
+                    {
+                        model: Users,
+                        attributes: ['id', 'username']
+                    }
+                ],
+                order: [
+                    ['createdAt', 'Desc']
+                ],
+                offset: (page - 1) * limit,
+                limit,
+            });
 
             if (booksList.length === 0) {
                 return res.status(404).json({
