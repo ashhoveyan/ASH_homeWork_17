@@ -47,7 +47,7 @@ export default {
             });
 
 
-            if (!user || hashedPassword !== user.password) {
+            if (!user) {
                 return res.status(400).json({
                     message: 'Invalid username or password'
                 });

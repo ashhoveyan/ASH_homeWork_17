@@ -4,38 +4,71 @@ import { DataTypes, Model } from 'sequelize';
 import Books from './Books.js';
 import Users from './Users.js';
 
-class Review extends Model {}
+class Reviews extends Model {}
 
-Review.init(
+
+Reviews.init(
     {
         id: {
             type: DataTypes.BIGINT.UNSIGNED,
+            allowNull: false,
             primaryKey: true,
             autoIncrement: true,
         },
-        review: {
-            type: DataTypes.TEXT,
+        userId: {
+            type: DataTypes.BIGINT.UNSIGNED,
             allowNull: false,
-            validate: {
-                notEmpty: true,
+            references: {
+                model: Users,
+                key: 'id'
             },
+            onDelete: 'CASCADE',
+            onUpdate: 'CASCADE',
+        },
+        bookId: {
+            type: DataTypes.BIGINT.UNSIGNED,
+            allowNull: false,
+            references: {
+                model: Books,
+                key: 'id'
+            },
+            onDelete: 'CASCADE',
+            onUpdate: 'CASCADE',
+        },
+        review: {
+            type: DataTypes.STRING(255),
+            allowNull: false,
         },
         rating: {
-            type: DataTypes.INTEGER,
+            type: DataTypes.TINYINT.UNSIGNED,
             allowNull: false,
-        },
+            validate: {
+                min: 1,
+                max: 5,
+            },
+        }
     },
     {
         sequelize,
         timestamps: true,
-        modelName: 'reviews',
+        modelName: 'Reviews',
         tableName: 'reviews',
+        indexes: [
+            { fields: ['userId'] },
+            { fields: ['bookId'] }
+        ]
     }
 );
 
-Review.belongsTo(Users, { foreignKey: 'userId', as: 'user' });
-Review.belongsTo(Books, { foreignKey: 'bookId', as: 'book' });
-Users.hasMany(Review, { foreignKey: 'userId', as: 'reviews' });
-Books.hasMany(Review, { foreignKey: 'bookId', as: 'reviews' });
+Reviews.belongsTo(Users, {onDelete: "CASCADE",
+    onUpdate: "CASCADE",
+    foreignKey: "userId",
+});
 
-export default Review;
+Reviews.belongsTo(Books, {
+    onDelete: "CASCADE",
+    onUpdate: "CASCADE",
+    foreignKey: "bookId",
+});
+
+export default Reviews;

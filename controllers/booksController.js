@@ -1,6 +1,6 @@
 import Books from '../models/Books.js'
-
 import Users from '../models/Users.js'
+import Reviews from "../models/Reviews.js";
 
 
 
@@ -45,13 +45,24 @@ export default {
         try {
             const total = await Books.count()
 
-            let page = 1;
-            let limit = 10;
+            let page = +req.query.page;
+            let limit = +req.query.limit;
+            let offset = (page - 1) * limit;
 
-            // const offset= (page - 1) * limit,
+
+            const maxPageCount = Math.ceil(total / limit);
+
+            if (page > maxPageCount) {
+                res.status(400).json({
+                    message: 'Book does not exist',
+                });
+                return
+            }
 
 
             const booksList = await Books.findAll({
+                limit,
+                offset,
                 include: [
                     {
                         model: Users,
@@ -61,7 +72,6 @@ export default {
                 order: [
                     ['createdAt', 'Desc']
                 ],
-
             });
 
             if (booksList.length === 0) {
