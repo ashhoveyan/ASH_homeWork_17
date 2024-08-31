@@ -37,17 +37,14 @@ export default {
     async login(req, res) {
         try {
             const { username, password } = req.body;
-            const hashedPassword = await bcrypt.hash(password + process.env.SECRET_FOR_PASSWORD, 10);
 
             const user = await Users.findOne({
-                where: {
-                    username: username ,
-                    password: hashedPassword
-                },
+                where: {username: username}
             });
+            const hashedPassword = await bcrypt.hash(password + process.env.SECRET_FOR_PASSWORD, 10);
 
 
-            if (!user) {
+            if (!user || hashedPassword !== user.password) {
                 return res.status(400).json({
                     message: 'Invalid username or password'
                 });
@@ -65,9 +62,7 @@ export default {
 
 
             console.log(token)
-            req.headers.authorization = token;
 
-            //user.password = undefined
 
             return res.status(200).json({
                 message: 'User logged in successfully',

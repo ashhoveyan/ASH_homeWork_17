@@ -1,5 +1,6 @@
 import Books from "../models/Books.js"
 import Reviews from "../models/Reviews.js";
+import Users from '../models/Users.js';
 
 
 export default {
@@ -66,7 +67,17 @@ export default {
             }
 
             const booksReviews = await Reviews.findAll({
-                where: { bookId: bookId }
+                where: { bookId: bookId },
+
+                include: [
+                    {
+                        model: Books,
+                    },
+                    {
+                        model: Users,
+                        attributes: ['id', 'username']
+                    }
+                ],
             });
 
             const ratings = booksReviews.map(review => parseInt(review.rating, 10));

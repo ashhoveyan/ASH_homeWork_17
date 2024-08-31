@@ -22,6 +22,9 @@ Users.init(
         password: {
             type: DataTypes.STRING,
             allowNull: false,
+            // get() {
+            //     return undefined;
+            // }
         }
     },
     {
