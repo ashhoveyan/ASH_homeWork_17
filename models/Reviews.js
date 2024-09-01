@@ -14,7 +14,7 @@ Reviews.init(
         },
 
         review: {
-            type: DataTypes.STRING,
+            type: DataTypes.TEXT,
             allowNull: false,
         },
         rating: {
@@ -29,7 +29,7 @@ Reviews.init(
     {
         sequelize,
         timestamps: true,
-        modelName: 'Reviews',
+        modelName: 'reviews',
         tableName: 'reviews',
 
     }

@@ -43,11 +43,11 @@ Books.belongsToMany(Category, {through: BookCategory})
 
 Reviews.belongsTo(Users);
 Reviews.belongsTo(Books);
-// Reviews.hasMany(Comments, {
-//     onDelete: "CASCADE",
-//     onUpdate: "CASCADE",
-//     foreignKey: 'reviewId'
-// });
+Reviews.hasMany(Comments, {
+    onDelete: "CASCADE",
+    onUpdate: "CASCADE",
+    foreignKey: 'reviewId'
+});
 
 Comments.belongsTo(Users);
 Comments.belongsTo(Reviews);

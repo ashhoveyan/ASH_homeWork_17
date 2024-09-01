@@ -20,7 +20,7 @@ Favorites.init(
     {
         sequelize,
         timestamps: true,
-        modelName: 'Favorites',
+        modelName: 'favorites',
         tableName: 'favorites',
 
     }
