@@ -66,7 +66,7 @@ export default {
                 include: [
                     {
                         model: Users,
-                        attributes: ['id', 'username']
+                        // attributes: ['id', 'username']
                     }
                 ],
                 order: [
