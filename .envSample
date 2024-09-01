@@ -1,9 +1,7 @@
 PORT=
 
-
 SECRET_FOR_JWT=
 SECRET_FOR_PASSWORD=
-
 
 DB_HOST=localhost
 DB_NAME=

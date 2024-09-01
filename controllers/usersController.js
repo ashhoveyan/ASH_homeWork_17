@@ -1,4 +1,4 @@
-import bcrypt from 'bcrypt';
+import md5 from 'md5';
 import jwt from 'jsonwebtoken';
 
 import Users from '../models/Users.js';
@@ -7,7 +7,7 @@ export default {
     async registration(req, res) {
         try{
             const {username, password} = req.body;
-            const hashedPassword = await bcrypt.hash(password + process.env.SECRET_FOR_PASSWORD, 10);
+            const hashedPassword = md5(md5(password) + process.env.SECRET_FOR_PASSWORD);
             const [user, created] = await Users.findOrCreate({
                 where: { username: username },
                 defaults: {
@@ -20,7 +20,6 @@ export default {
                     message: 'User already exists',
                 });
             } else {
-                user.password = undefined
                 return res.status(201).json({
                     message: 'User created successfully',
                     user: user,
@@ -39,16 +38,25 @@ export default {
             const { username, password } = req.body;
 
             const user = await Users.findOne({
-                where: {username: username}
+                where: {username: username},
+                attributes: ['id', 'username', 'password', 'createdAt', 'updatedAt']
+
             });
-            const hashedPassword = await bcrypt.hash(password + process.env.SECRET_FOR_PASSWORD, 10);
+            const hashedPassword = md5(md5(password) + process.env.SECRET_FOR_PASSWORD);
 
+            // console.log(user.password)
+            // console.log(hashedPassword)
+            // console.log(user.getDataValue("password"));
 
-            if (!user || hashedPassword !== user.password) {
+            if (!user || hashedPassword !== user.getDataValue("password")) {
                 return res.status(400).json({
                     message: 'Invalid username or password'
                 });
             }
+
+            // console.log(user.password)
+            // console.log(hashedPassword)
+            // console.log(user.getDataValue("password"));
             const payload = {
                 username: user.username,
                 id: user.id
@@ -62,6 +70,7 @@ export default {
 
 
             console.log(token)
+            // console.log(user)
 
 
             return res.status(200).json({

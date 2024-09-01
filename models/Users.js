@@ -4,12 +4,12 @@ import sequelize from "../clients/sequelize.mysql.js";
 
 import Books from "./Books.js";
 
-class Users extends Model {}
+// class Users extends Model {}
 
 
-Users.init(
-    {
-        id: {
+
+const Users = sequelize.define('user', {
+    id: {
             type: DataTypes.BIGINT.UNSIGNED,
             allowNull: false,
             primaryKey: true,
@@ -18,17 +18,20 @@ Users.init(
         username: {
             type: DataTypes.STRING,
             allowNull: false,
+            unique: true,
         },
         password: {
             type: DataTypes.STRING,
             allowNull: false,
-            // get() {
-            //     return undefined;
-            // }
+            get() {
+                // let rawValue = this.getDataValue('password');
+                // return rawValue = undefined;
+                return undefined
+            }
         }
     },
     {
-        sequelize,
+        // sequelize,
         timestamps: true,
         modelName: 'users',
         tableName: 'users',
@@ -38,8 +41,42 @@ Users.init(
                 fields: ['username'],
             },
         ]
-    }
-)
+});
+//
+// Users.init(
+//     {
+//         id: {
+//             type: DataTypes.BIGINT.UNSIGNED,
+//             allowNull: false,
+//             primaryKey: true,
+//             autoIncrement: true,
+//         },
+//         username: {
+//             type: DataTypes.STRING,
+//             allowNull: false,
+//         },
+//         password: {
+//             type: DataTypes.STRING,
+//             allowNull: false,
+//             get(){
+//                 return this.password = undefined
+//             }
+//         }
+//     },
+//     {
+//         sequelize,
+//         timestamps: true,
+//         modelName: 'users',
+//         tableName: 'users',
+//         indexes: [
+//             {
+//                 unique: true,
+//                 fields: ['username'],
+//             },
+//         ]
+//     }
+// )
+
 Users.hasMany(Books,{
     onDelete: "CASCADE",
     onUpdate: "CASCADE",
