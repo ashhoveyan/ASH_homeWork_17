@@ -1,7 +1,11 @@
 import Users from './models/Users.js'
 import Books from './models/Books.js'
 import Reviews from "./models/Reviews.js";
+import Comments from "./models/Comments.js";
+import Category from "./models/Category.js";
 import Favorites from "./models/Favorites.js";
+import BookCategory from "./models/BookCategory.js";
+
 
 Users.hasMany(Books, {
     onDelete: "CASCADE",
@@ -13,8 +17,11 @@ Users.hasMany(Reviews, {
     onUpdate: "CASCADE",
     foreignKey: 'userId'
 });
-
-
+Users.hasMany(Comments, {
+    onDelete: "CASCADE",
+    onUpdate: "CASCADE",
+    foreignKey: 'userId'
+});
 Users.hasMany(Favorites, {
     onDelete: "CASCADE",
     onUpdate: "CASCADE",
@@ -22,8 +29,6 @@ Users.hasMany(Favorites, {
 });
 
 Books.belongsTo(Users );
-
-
 Books.hasMany(Reviews,  {
     onDelete: "CASCADE",
     onUpdate: "CASCADE",
@@ -34,18 +39,33 @@ Books.hasMany(Favorites,  {
     onUpdate: "CASCADE",
     foreignKey: 'bookId'
 });
+Books.belongsToMany(Category, {through: BookCategory})
 
 Reviews.belongsTo(Users);
 Reviews.belongsTo(Books);
+// Reviews.hasMany(Comments, {
+//     onDelete: "CASCADE",
+//     onUpdate: "CASCADE",
+//     foreignKey: 'reviewId'
+// });
+
+Comments.belongsTo(Users);
+Comments.belongsTo(Reviews);
+
 Favorites.belongsTo(Users);
 Favorites.belongsTo(Books);
+
+Category.belongsToMany(Books, {through: BookCategory});
+
 const models = [
     Users,
     Books,
     Reviews,
-    Favorites
+    Comments,
+    Favorites,
+    Category,
+    BookCategory
 ];
-
 
 (async () => {
     for (const model of models) {

@@ -1,31 +1,24 @@
+import {DataTypes, Model} from 'sequelize';
 import sequelize from '../clients/sequelize.mysql.js';
-import { DataTypes, Model } from 'sequelize';
 
+class BookCategory extends Model {}
 
-
-class Favorites extends Model {}
-
-
-Favorites.init(
+BookCategory.init(
     {
         id: {
             type: DataTypes.BIGINT.UNSIGNED,
-            primaryKey: true,
             autoIncrement: true,
+            primaryKey: true,
             allowNull: false,
-
         },
 
     },
     {
         sequelize,
         timestamps: true,
-        modelName: 'Favorites',
-        tableName: 'favorites',
-
+        modelName: 'bookCategory',
+        tableName: 'bookCategory',
     }
+);
 
-)
-
-
-export default Favorites;
+export default BookCategory;

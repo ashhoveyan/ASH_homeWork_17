@@ -14,7 +14,7 @@ Reviews.init(
         },
 
         review: {
-            type: DataTypes.STRING(255),
+            type: DataTypes.STRING,
             allowNull: false,
         },
         rating: {
@@ -31,10 +31,7 @@ Reviews.init(
         timestamps: true,
         modelName: 'Reviews',
         tableName: 'reviews',
-        indexes: [
-            { fields: ['userId'] },
-            { fields: ['bookId'] }
-        ]
+
     }
 );
 
