@@ -2,6 +2,7 @@ import {Model, DataTypes} from "sequelize";
 import sequelize from "../clients/sequelize.mysql.js";
 
 
+
 class Books extends Model {}
 
 Books.init(
@@ -18,10 +19,6 @@ Books.init(
         },
         author: {
             type: DataTypes.STRING,
-            allowNull: false,
-        },
-        userId: {
-            type: DataTypes.BIGINT.UNSIGNED,
             allowNull: false,
         },
     },

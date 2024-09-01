@@ -1,9 +1,6 @@
 import sequelize from '../clients/sequelize.mysql.js';
 import { DataTypes, Model } from 'sequelize';
 
-import Books from './Books.js';
-import Users from './Users.js';
-
 class Reviews extends Model {}
 
 
@@ -15,26 +12,7 @@ Reviews.init(
             primaryKey: true,
             autoIncrement: true,
         },
-        userId: {
-            type: DataTypes.BIGINT.UNSIGNED,
-            allowNull: false,
-            references: {
-                model: Users,
-                key: 'id'
-            },
-            onDelete: 'CASCADE',
-            onUpdate: 'CASCADE',
-        },
-        bookId: {
-            type: DataTypes.BIGINT.UNSIGNED,
-            allowNull: false,
-            references: {
-                model: Books,
-                key: 'id'
-            },
-            onDelete: 'CASCADE',
-            onUpdate: 'CASCADE',
-        },
+
         review: {
             type: DataTypes.STRING(255),
             allowNull: false,
@@ -60,15 +38,6 @@ Reviews.init(
     }
 );
 
-Reviews.belongsTo(Users, {onDelete: "CASCADE",
-    onUpdate: "CASCADE",
-    foreignKey: "userId",
-});
 
-Reviews.belongsTo(Books, {
-    onDelete: "CASCADE",
-    onUpdate: "CASCADE",
-    foreignKey: "bookId",
-});
 
 export default Reviews;
