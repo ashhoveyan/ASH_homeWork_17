@@ -65,7 +65,7 @@ export default {
             const token = jwt.sign(
                 payload,
                 process.env.SECRET_FOR_JWT, {
-                expiresIn: '1h'
+                expiresIn: '24h'
             });
 
 
