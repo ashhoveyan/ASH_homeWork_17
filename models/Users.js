@@ -23,7 +23,12 @@ const Users = sequelize.define('users', {
 
                 return undefined
             }
-        }
+        },
+        type: {
+            type: DataTypes.ENUM('user', 'admin'),
+            allowNull: false,
+            defaultValue: 'user',
+        },
     },
     {
         timestamps: true,
