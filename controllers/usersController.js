@@ -44,9 +44,6 @@ export default {
             });
             const hashedPassword = md5(md5(password) + process.env.SECRET_FOR_PASSWORD);
 
-            // console.log(user.password)
-            // console.log(hashedPassword)
-            // console.log(user.getDataValue("password"));
 
             if (!user || hashedPassword !== user.getDataValue("password")) {
                 return res.status(400).json({
@@ -54,9 +51,6 @@ export default {
                 });
             }
 
-            // console.log(user.password)
-            // console.log(hashedPassword)
-            // console.log(user.getDataValue("password"));
             const payload = {
                 username: user.username,
                 id: user.id
@@ -73,10 +67,20 @@ export default {
             // console.log(user)
 
 
+            if (user.type === "admin"){
+                return res.status(200).json({
+                    message: 'Admin logged in successfully',
+                    user: user,
+                    token: token,
+                    isAdmin:true
+                });
+            }
+
             return res.status(200).json({
                 message: 'User logged in successfully',
                 user: user,
-                token: token
+                token: token,
+                isAdmin:false
             });
 
 
