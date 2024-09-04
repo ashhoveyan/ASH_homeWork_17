@@ -80,6 +80,7 @@ export default {
             } else {
                 return res.status(200).json({
                     message: "No comments found for this review",
+                    comments: comments || [],
                 });
             }
 

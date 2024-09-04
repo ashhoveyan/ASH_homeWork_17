@@ -1,7 +1,7 @@
 import Books from "../models/Books.js"
 import Reviews from "../models/Reviews.js";
 import Users from '../models/Users.js';
-
+import {Sequelize} from "sequelize";
 
 export default {
     createReview: async (req, res) => {
@@ -47,7 +47,7 @@ export default {
             res.status(500).json({ error: 'An error occurred while creating the review' });
         }
     },
-    getReviewsByBookId: async (req, res) => {
+    getReviews: async (req, res) => {
         try{
 
             const { bookId } = req.query;
@@ -95,5 +95,47 @@ export default {
                 error: error.message
             });
         }
+    },
+     getReviewSummary:async(req, res) =>{
+        const {userId} = req.params;
+
+        try {
+            const userExists = await Users.findByPk(userId);
+
+            if (!userExists) {
+                return res.status(404).json({
+                    message: 'User not found.'
+                });
+            }
+
+            const reviewSummary = await Reviews.findOne({
+                attributes: [
+                    [Sequelize.fn('COUNT', Sequelize.col('id')), 'totalReviews'],
+                    [Sequelize.fn('AVG', Sequelize.col('rating')), 'averageRating'],
+                    [Sequelize.fn('COUNT', Sequelize.col('bookId')), 'totalBooksReviewed'],
+                ],
+                where: { userId }
+            });
+
+            if (!reviewSummary) {
+                return res.status(404).json({
+                    message: 'No reviews found for this user',
+                    reviewSummary: []
+                });
+            }
+
+            return res.status(200).json({
+                message: 'User review summary retrieved successfully.',
+                reviewSummary
+            });
+        } catch (error) {
+            console.error('Error fetching review summary:', error);
+            return res.status(500).json({
+                message: 'Internal server error',
+                error: error.message
+            });
+        }
     }
+
+
 }

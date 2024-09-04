@@ -1,5 +1,8 @@
 import {DataTypes, Model} from 'sequelize';
 import sequelize from '../clients/sequelize.mysql.js';
+import BookCategory from "./BookCategory.js";
+import Books from "./Books.js";
+
 
 class Category extends Model {}
 
@@ -30,5 +33,6 @@ Category.init(
         ]
     }
 );
+
 
 export default Category;

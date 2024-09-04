@@ -15,5 +15,7 @@ const router = Router();
 
 router.post("/add",authenticate  ,validate(bookSchema.addBook,'body'), bookController.addBook);
 router.get("/list", authenticate ,validate(bookSchema.getBooks,'body'), bookController.getBooks);
+router.get('/top-rated', authenticate, bookController.getTopRatedBooks);
+
 
 export default router;

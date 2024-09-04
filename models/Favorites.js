@@ -1,7 +1,7 @@
 import sequelize from '../clients/sequelize.mysql.js';
 import { DataTypes, Model } from 'sequelize';
-
-
+import Users from "./Users.js";
+import Books from "./Books.js";
 
 class Favorites extends Model {}
 

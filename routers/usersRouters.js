@@ -18,6 +18,7 @@ const router = Router();
 router.post("/registration", validate(userSchema.registration,'body'),  userController.registration);
 router.post("/login", validate(userSchema.login,'body'),  userController.login);
 
+router.get('/active-reviewers',authenticate,  userController.getActiveReviewers);
 
 
 

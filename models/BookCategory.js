@@ -11,6 +11,22 @@ BookCategory.init(
             primaryKey: true,
             allowNull: false,
         },
+        bookId: {
+            type: DataTypes.BIGINT.UNSIGNED,
+            allowNull: false,
+            references: {
+                model: 'Books',
+                key: 'id',
+            },
+        },
+        categoryId: {
+            type: DataTypes.BIGINT.UNSIGNED,
+            allowNull: false,
+            references: {
+                model: 'Category',
+                key: 'id',
+            },
+        },
 
     },
     {

@@ -16,7 +16,9 @@ const router = Router();
 //apis
 
 router.post("/add", authenticate,validate(reviewsSchema.createReview,'body'),  reviewsController.createReview);
-router.get("/list", authenticate,validate(reviewsSchema.getReviews,'body'),  reviewsController.getReviewsByBookId);
+router.get("/list", authenticate,validate(reviewsSchema.getReviews,'body'),  reviewsController.getReviews);
+router.get('/review-summary',authenticate,  reviewsController.getReviewSummary);
+
 
 
 

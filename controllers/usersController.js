@@ -2,17 +2,20 @@ import md5 from 'md5';
 import jwt from 'jsonwebtoken';
 
 import Users from '../models/Users.js';
+import {hash} from "bcrypt";
+import {Sequelize} from "sequelize";
+import Reviews from "../models/Reviews.js";
 
 export default {
     async registration(req, res) {
         try{
             const {username, password} = req.body;
-            const hashedPassword = md5(md5(password) + process.env.SECRET_FOR_PASSWORD);
+            //const hashedPassword = md5(md5(password) + process.env.SECRET_FOR_PASSWORD);
             const [user, created] = await Users.findOrCreate({
                 where: { username: username },
                 defaults: {
-                    username: username,
-                    password: hashedPassword,
+                     username,
+                     password
                 }
             });
             if (!created) {
@@ -38,11 +41,11 @@ export default {
             const { username, password } = req.body;
 
             const user = await Users.findOne({
-                where: {username: username},
-                attributes: ['id', 'username', 'password', 'createdAt', 'updatedAt']
+                where: {username},
 
             });
-            const hashedPassword = md5(md5(password) + process.env.SECRET_FOR_PASSWORD);
+            //const hashedPassword = md5(md5(password) + process.env.SECRET_FOR_PASSWORD);
+            const hashedPassword = Users.hash(password)
 
 
             if (!user || hashedPassword !== user.getDataValue("password")) {
@@ -91,6 +94,72 @@ export default {
                 error: error.message
             });
         }
-    }
+    },
+     getActiveReviewers:async(req, res) =>{
+        try {
+            const total = await Users.count();
 
+            let page = +req.query.page
+            let limit = +req.query.limit
+            const order = req.query.order;
+
+            const offset = (page - 1) * limit;
+
+            const maxPageCount = Math.ceil(total / limit);
+
+            if (page > maxPageCount) {
+                return res.status(404).json({
+                    message: 'Page not found.',
+                    users: []
+                });
+            }
+
+            const { id: userId } = req.user;
+            const userExists = await Users.findByPk(userId);
+
+            if (!userExists) {
+                return res.status(404).json({
+                    message: 'User not found.'
+                });
+            }
+
+            const topActiveReviewers = await Users.findAll({
+                attributes: [
+                    'id',
+                    'username',
+                    [
+                        Sequelize.fn('COUNT', Sequelize.col('reviews.id')),
+                        'reviewCount'
+                    ]
+                ],
+                include: [
+                    {
+                        model: Reviews,
+                        attributes: []
+                    }
+                ],
+                group: ['Users.id'],
+                order: [
+                    [Sequelize.fn('COUNT', Sequelize.col('reviews.id')), order]
+                ],
+                // limit,
+                // offset
+            });
+
+            return res.status(200).json({
+                message: 'Most active reviewers retrieved successfully.',
+                topActiveReviewers,
+                total,
+                currentPage: page,
+                totalPages: maxPageCount
+            });
+
+        } catch (e) {
+            console.error('Error fetching active reviewers:', e);
+            return res.status(500).json({
+                message: 'Internal server error',
+                error: e.message
+            });
+        }
+    }
 }

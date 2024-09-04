@@ -1,5 +1,8 @@
 import {DataTypes, Model} from 'sequelize';
 import sequelize from '../clients/sequelize.mysql.js';
+import Users from "./Users.js";
+import Reviews from "./Reviews.js";
+
 
 class Comments extends Model {}
 

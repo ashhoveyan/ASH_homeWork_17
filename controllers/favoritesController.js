@@ -38,6 +38,11 @@ export default {
     async getFavorites(req, res) {
         try {
             const { id } = req.user;
+            const total = await Books.count()
+
+            let page = +req.query.page;
+            let limit = +req.query.limit;
+            let offset = (page - 1) * limit;
 
             const favorites = await Favorites.findAll({
                 where: { userId: id },
@@ -46,6 +51,8 @@ export default {
                         model: Books,
                     }
                 ],
+                limit,
+                offset
             });
 
             if (favorites.length > 0) {

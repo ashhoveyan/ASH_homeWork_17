@@ -6,56 +6,58 @@ import Category from "./models/Category.js";
 import Favorites from "./models/Favorites.js";
 import BookCategory from "./models/BookCategory.js";
 
-
 Users.hasMany(Books, {
     onDelete: "CASCADE",
     onUpdate: "CASCADE",
     foreignKey: 'userId'
 });
-Users.hasMany(Reviews, {
-    onDelete: "CASCADE",
-    onUpdate: "CASCADE",
-    foreignKey: 'userId'
-});
-Users.hasMany(Comments, {
-    onDelete: "CASCADE",
-    onUpdate: "CASCADE",
-    foreignKey: 'userId'
-});
+Books.belongsTo(Users );
+
 Users.hasMany(Favorites, {
     onDelete: "CASCADE",
     onUpdate: "CASCADE",
     foreignKey: 'userId'
 });
+Favorites.belongsTo(Users);
 
-Books.belongsTo(Users );
-Books.hasMany(Reviews,  {
+Users.hasMany(Comments, {
     onDelete: "CASCADE",
     onUpdate: "CASCADE",
-    foreignKey: 'bookId'
+    foreignKey: 'userId'
 });
+Comments.belongsTo(Users);
+
+Reviews.belongsTo(Users, {
+    onDelete: "CASCADE",
+    onUpdate: "CASCADE",
+    foreignKey: 'userId'
+});
+
+Books.hasMany(Reviews, { foreignKey: 'bookId' });
+
 Books.hasMany(Favorites,  {
     onDelete: "CASCADE",
     onUpdate: "CASCADE",
     foreignKey: 'bookId'
 });
-Books.belongsToMany(Category, {through: BookCategory})
+Favorites.belongsTo(Books);
 
-Reviews.belongsTo(Users);
-Reviews.belongsTo(Books);
+Books.belongsToMany(Category, {through: BookCategory})
+Category.belongsToMany(Books, {through: BookCategory});
+Reviews.belongsTo(Books, {
+    onDelete: "CASCADE",
+    onUpdate: "CASCADE",
+    foreignKey: 'bookId'
+});
+
 Reviews.hasMany(Comments, {
     onDelete: "CASCADE",
     onUpdate: "CASCADE",
     foreignKey: 'reviewId'
 });
-
-Comments.belongsTo(Users);
 Comments.belongsTo(Reviews);
 
-Favorites.belongsTo(Users);
-Favorites.belongsTo(Books);
 
-Category.belongsToMany(Books, {through: BookCategory});
 
 const models = [
     Users,

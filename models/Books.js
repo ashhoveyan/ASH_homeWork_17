@@ -1,7 +1,10 @@
 import {Model, DataTypes} from "sequelize";
 import sequelize from "../clients/sequelize.mysql.js";
-
-
+import BookCategory from "./BookCategory.js";
+import Category from "./Category.js";
+import Users from "./Users.js";
+import Reviews from "./Reviews.js";
+import Favorites from "./Favorites.js";
 
 class Books extends Model {}
 
@@ -35,6 +38,5 @@ Books.init(
         ]
     }
 );
-
 
 export default Books;
