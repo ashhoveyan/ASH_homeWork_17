@@ -3,6 +3,11 @@ export default (schema, target) => {
         const {error} = schema.validate(req[target], { abortEarly: false });
         const fields = {};
         if (error) {
+
+            if (req.file){
+                fs.unlinkSync(req.file.path);
+            }
+
             error.details.forEach(detail => {
                 fields[detail.path[0]] = detail.message;
             });

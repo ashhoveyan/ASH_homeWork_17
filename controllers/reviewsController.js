@@ -112,7 +112,7 @@ export default {
                 attributes: [
                     [Sequelize.fn('COUNT', Sequelize.col('id')), 'totalReviews'],
                     [Sequelize.fn('AVG', Sequelize.col('rating')), 'averageRating'],
-                    [Sequelize.fn('COUNT', Sequelize.col('bookId')), 'totalBooksReviewed'],
+                    [Sequelize.fn('COUNT',Sequelize.fn("DISTINCT"), Sequelize.col('bookId')), 'totalBooksReviewed'],
                 ],
                 where: { userId }
             });

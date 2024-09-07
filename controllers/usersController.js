@@ -8,17 +8,26 @@ import Reviews from "../models/Reviews.js";
 
 export default {
     async registration(req, res) {
+        //let avatar = req.avatar;
         try{
+            console.log(req.file)
             const {username, password} = req.body;
-            //const hashedPassword = md5(md5(password) + process.env.SECRET_FOR_PASSWORD);
+
+            const avatar = req.file ? req.file.path : null;
             const [user, created] = await Users.findOrCreate({
-                where: { username: username },
+                where: { username },
                 defaults: {
                      username,
-                     password
+                     password,
+                     avatar,
                 }
             });
             if (!created) {
+
+                if (avatar) {
+                    fs.unlinkSync(avatar);
+                }
+
                 return res.status(409).json({
                     message: 'User already exists',
                 });
@@ -30,6 +39,7 @@ export default {
             }
         }catch (error) {
             console.error('Registration Error:', error);
+
             return res.status(500).json({
                 message: 'registration failed',
                 error: error.message,

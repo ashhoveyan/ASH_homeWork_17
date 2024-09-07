@@ -44,6 +44,10 @@ class Users extends Model {
                 allowNull: false,
                 defaultValue: 'user',
             },
+         avatar: {
+             type: DataTypes.STRING,
+             allowNull: true
+         }
     },
     {
         sequelize,
