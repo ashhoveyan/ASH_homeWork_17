@@ -8,11 +8,12 @@ import Reviews from "../models/Reviews.js";
 
 export default {
     async registration(req, res) {
+        const avatar = req.file ? req.file.path : null;
         try{
             console.log(req.file)
             const {username, password} = req.body;
 
-            const avatar = req.file ? req.file.path : null;
+
             const [user, created] = await Users.findOrCreate({
                 where: { username },
                 defaults: {
@@ -38,7 +39,9 @@ export default {
             }
         }catch (error) {
             console.error('Registration Error:', error);
-
+            if (avatar) {
+                fs.unlinkSync(avatar);
+            }
             return res.status(500).json({
                 message: 'registration failed',
                 error: error.message,
@@ -105,15 +108,17 @@ export default {
         }
     },
     updateProfile:async (req, res) =>{
+        const avatar = req.file ? req.file.path : null;
+
         try {
             const { id } = req.user;
             const { username } = req.body;
-            const avatar = req.file ? req.file.path : null;
 
 
             const user = await Users.findByPk(id);
 
             if (!user) {
+
                 return res.status(404).json({
                     message: 'User not found',
                 });
