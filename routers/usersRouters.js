@@ -23,6 +23,14 @@ router.post("/registration",
 
 router.post("/login", validate(userSchema.login,'body'),  userController.login);
 
+router.put(
+    '/update',
+    authenticate,
+    fileUpload.single('avatar'),
+    validate(userSchema.updateProfile, 'body'),
+    userController.updateProfile
+);
+
 router.get('/active-reviewers',authenticate,  userController.getActiveReviewers);
 
 

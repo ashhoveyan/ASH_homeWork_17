@@ -10,6 +10,7 @@ export default {
        try {
            const { title, author,categoryName}= req.body
            const{userId} = req.user
+           const cover = req.file ? req.file.filename : null;
 
 
            const [category] = await Category.findOrCreate({
@@ -22,9 +23,14 @@ export default {
                   title,
                   author,
                   userId,
+                   cover
                }
            })
            if(!created){
+               if (cover) {
+                   fs.unlinkSync(cover);
+               }
+
                return res.status(409).json({
                    message: 'Book already exists',
                     book

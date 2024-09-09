@@ -3,12 +3,11 @@ import jwt from 'jsonwebtoken';
 
 import Users from '../models/Users.js';
 import {hash} from "bcrypt";
-import {Sequelize} from "sequelize";
+import {Sequelize, where} from "sequelize";
 import Reviews from "../models/Reviews.js";
 
 export default {
     async registration(req, res) {
-        //let avatar = req.avatar;
         try{
             console.log(req.file)
             const {username, password} = req.body;
@@ -103,6 +102,48 @@ export default {
                 message: 'Login failed',
                 error: error.message
             });
+        }
+    },
+    updateProfile:async (req, res) =>{
+        try {
+            const { id } = req.user;
+            const { username } = req.body;
+            const avatar = req.file ? req.file.filename : null;
+
+
+            const user = await Users.findByPk(id);
+
+            if (!user) {
+                return res.status(404).json({
+                    message: 'User not found',
+                });
+            }
+
+            if (avatar && user.avatar) {
+                try {
+                    fs.unlinkSync(`public/avatar/${user.avatar}`);
+                } catch (fileErr) {
+                    console.error('Error removing old avatar:', fileErr.message);
+                    return res.status(500).json({ message: 'Failed to update avatar. Please try again.' });
+                }
+            }
+
+            await Users.update(
+                {
+                    username,
+                     avatar,
+                },
+                {
+                    where:{id}
+                }
+            );
+
+            res.status(200).json({
+                message: 'User updated successfully',
+            });
+        }catch (err){
+            console.error('Error updating profile:', err.message);
+            res.status(500).json({ message: 'Internal server error' });
         }
     },
      getActiveReviewers:async(req, res) =>{

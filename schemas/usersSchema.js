@@ -9,4 +9,7 @@ export default {
         username: Joi.string().min(1).max(25).required(),
         password: Joi.string().min(6).max(32).required(),
     }),
+    updateProfile: Joi.object({
+        username: Joi.string().min(1).max(25).required(),
+    }),
 }
