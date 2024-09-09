@@ -10,7 +10,7 @@ export default {
        try {
            const { title, author,categoryName}= req.body
            const{userId} = req.user
-           const cover = req.file ? req.file.filename : null;
+           const cover = req.file ? req.file.path : null;
 
 
            const [category] = await Category.findOrCreate({

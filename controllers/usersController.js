@@ -108,7 +108,7 @@ export default {
         try {
             const { id } = req.user;
             const { username } = req.body;
-            const avatar = req.file ? req.file.filename : null;
+            const avatar = req.file ? req.file.path : null;
 
 
             const user = await Users.findByPk(id);
@@ -121,7 +121,7 @@ export default {
 
             if (avatar && user.avatar) {
                 try {
-                    fs.unlinkSync(`public/avatar/${user.avatar}`);
+                    fs.unlinkSync(`${user.avatar}`);
                 } catch (fileErr) {
                     console.error('Error removing old avatar:', fileErr.message);
                     return res.status(500).json({ message: 'Failed to update avatar. Please try again.' });
